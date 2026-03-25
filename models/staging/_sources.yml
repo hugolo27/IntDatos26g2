@@ -1,0 +1,16 @@
+version: 2
+sources:
+  - name: raw
+    database: airbyte_curso
+    schema: main
+    tables:
+      - name: pokemon
+        description: Pokemon data from PokeAPI
+
+      - name: repositories
+        description: GitHub repositories from dbt-core and airbyte
+        loaded_at_field: _airbyte_extracted_at
+
+      - name: issues
+        description: GitHub issues from dbt-core and airbyte repositories
+        loaded_at_field: _airbyte_extracted_at

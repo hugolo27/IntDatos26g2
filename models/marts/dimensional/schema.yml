@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: dim_pokemon
+    description: "Dimension table containing descriptive information about each Pokemon"
+    columns:
+      - name: pokemon_id
+        description: "Unique identifier for the Pokemon"
+        tests:
+          - unique
+          - not_null
+      - name: pokemon_name
+        description: "Name of the Pokemon"
+        tests:
+          - not_null
+      - name: type_primary
+        description: "Primary type of the Pokemon"
+      - name: type_secondary
+        description: "Secondary type of the Pokemon (nullable)"
+      - name: type_combination
+        description: "Formatted combination of primary and secondary types"
+
+  - name: dim_type
+    description: "Dimension table containing all Pokemon types catalog"
+    columns:
+      - name: type_id
+        description: "Unique identifier for the type"
+        tests:
+          - unique
+          - not_null
+      - name: type_name
+        description: "Name of the Pokemon type"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_power_tier
+    description: "Dimension table for Pokemon power tier classification"
+    columns:
+      - name: tier_id
+        description: "Unique identifier for the power tier"
+        tests:
+          - unique
+          - not_null
+      - name: tier_name
+        description: "Name of the tier (Legendary, Strong, Normal)"
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_pokemon_stats
+    description: "Fact table containing quantitative metrics for each Pokemon"
+    columns:
+      - name: pokemon_id
+        description: "Foreign key to dim_pokemon"
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_pokemon')
+              field: pokemon_id
+      - name: power_tier_id
+        description: "Foreign key to dim_power_tier"
+        tests:
+          - relationships:
+              to: ref('dim_power_tier')
+              field: tier_id
+      - name: base_experience
+        description: "Base experience points of the Pokemon"
+        tests:
+          - not_null
+      - name: height
+        description: "Height of the Pokemon in decimeters"
+        tests:
+          - not_null
+      - name: weight
+        description: "Weight of the Pokemon in hectograms"
+        tests:
+          - not_null

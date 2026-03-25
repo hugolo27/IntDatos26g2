@@ -1,0 +1,22 @@
+# dbt artifacts
+target/
+dbt_packages/
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+__pycache__/
+*.pyc
+
+# Environment
+.env
+*.log

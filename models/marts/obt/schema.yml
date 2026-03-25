@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: obt_pokemon_complete
+    description: "One Big Table with all Pokemon data denormalized for fast analytics"
+    columns:
+      - name: pokemon_id
+        description: "Unique identifier for the Pokemon"
+        tests:
+          - unique
+          - not_null
+      - name: pokemon_name
+        description: "Name of the Pokemon"
+        tests:
+          - not_null
+      - name: type_primary
+        description: "Primary type of the Pokemon"
+      - name: type_secondary
+        description: "Secondary type of the Pokemon (nullable)"
+      - name: base_experience
+        description: "Base experience points"
+        tests:
+          - not_null
+      - name: height
+        description: "Height in decimeters"
+        tests:
+          - not_null
+      - name: weight
+        description: "Weight in hectograms"
+        tests:
+          - not_null
+      - name: power_tier
+        description: "Calculated power tier (Legendary/Strong/Normal)"
+      - name: size_category
+        description: "Calculated size category (Small/Medium/Large)"
+      - name: weight_class
+        description: "Calculated weight class"
+      - name: is_dual_type
+        description: "Boolean flag indicating if Pokemon has two types"
+      - name: is_starter_type
+        description: "Boolean flag indicating if Pokemon is a starter type"
