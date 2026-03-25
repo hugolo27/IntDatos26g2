@@ -1,0 +1,78 @@
+version: 2
+
+models:
+  - name: stg_pokemon
+    description: Staging model for Pokemon data from PokeAPI
+    columns:
+      - name: pokemon_id
+        description: Unique identifier for the Pokemon
+        tests:
+          - unique
+          - not_null
+
+      - name: pokemon_name
+        description: Name of the Pokemon
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: height
+        description: Height of the Pokemon in decimeters
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 200
+
+      - name: weight
+        description: Weight of the Pokemon in hectograms
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 10000
+
+      - name: base_experience
+        description: Base experience points
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 1000
+
+  - name: stg_commits
+    description: Staging model for GitHub commits data
+    columns:
+      - name: commit_sha
+        description: Unique SHA hash for the commit
+        tests:
+          - unique
+          - not_null
+          - dbt_expectations.expect_column_value_lengths_to_equal:
+              value: 40
+
+      - name: commit_message
+        description: Commit message text
+        tests:
+          - not_null
+
+      - name: author_name
+        description: Name of the commit author
+        tests:
+          - not_null
+
+      - name: author_email
+        description: Email of the commit author
+        tests:
+          - not_null
+
+      - name: authored_at
+        description: Timestamp when the commit was authored
+        tests:
+          - not_null
+
+      - name: committed_at
+        description: Timestamp when the commit was committed
+        tests:
+          - not_null

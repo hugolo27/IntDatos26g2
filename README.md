@@ -70,7 +70,16 @@ The lineage graph shows data flow from sources through staging, intermediate, an
 
 ## Testing
 
-Includes generic tests, dbt-expectations, and custom singular tests.
+The project includes comprehensive data quality tests:
+- **44 data tests** in total
+- Generic tests (unique, not_null, relationships)
+- dbt-expectations tests (value ranges, type validation, string length)
+- 2 custom singular tests for business logic validation
+
+All tests pass successfully with `dbt build`.
+
+### Test Results
+![DAG with Tests](screenshots/dag_with_tests_tarea6.png)
 
 ## Status
 
