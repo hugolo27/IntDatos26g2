@@ -79,7 +79,7 @@ The project includes comprehensive data quality tests:
 All tests pass successfully with `dbt build`.
 
 ### Test Results
-![DAG with Tests](screenshots/dag_with_tests_tarea6.png)
+![DAG with Tests](screenshots/dag_with_tests.png)
 
 ## Status
 
