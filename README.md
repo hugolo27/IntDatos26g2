@@ -28,7 +28,8 @@ Two modeling approaches are implemented:
 models/
 ├── staging/
 │   ├── _sources.yml
-│   └── stg_pokemon.sql
+│   ├── stg_pokemon.sql
+│   └── stg_commits.sql
 ├── intermediate/
 │   └── int_pokemon_with_types.sql
 └── marts/
@@ -54,9 +55,18 @@ dbt docs generate # generate documentation
 dbt docs serve   # view docs locally
 ```
 
-## Data Source
+## Data Sources
 
-Data extracted from PokeAPI using Airbyte to MotherDuck database `airbyte_curso`.
+Data extracted using Airbyte to MotherDuck database `airbyte_curso`:
+
+1. **PokeAPI** - Pokemon data (height, weight, types, stats)
+2. **GitHub** - Repository commits from IntDatos26g2
+
+## Data Lineage
+
+![DAG Lineage](screenshots/dag_lineage.png)
+
+The lineage graph shows data flow from sources through staging, intermediate, and mart layers.
 
 ## Testing
 
