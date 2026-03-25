@@ -7,10 +7,6 @@ sources:
       - name: pokemon
         description: Pokemon data from PokeAPI
 
-      - name: repositories
-        description: GitHub repositories from dbt-core and airbyte
-        loaded_at_field: _airbyte_extracted_at
-
-      - name: issues
-        description: GitHub issues from dbt-core and airbyte repositories
+      - name: commits
+        description: GitHub commits from IntDatos26g2 repository
         loaded_at_field: _airbyte_extracted_at
