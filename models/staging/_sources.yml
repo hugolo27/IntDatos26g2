@@ -1,12 +1,10 @@
 version: 2
+
 sources:
   - name: raw
     database: airbyte_curso
     schema: main
     tables:
-      - name: pokemon
-        description: Pokemon data from PokeAPI
-
-      - name: commits
-        description: GitHub commits from IntDatos26g2 repository
-        loaded_at_field: _airbyte_extracted_at
+      - name: orders
+      - name: customers
+      - name: products

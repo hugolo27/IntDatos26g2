@@ -31,19 +31,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   mi_proyecto_dbt:
-    # Staging: vistas para datos crudos limpios
     staging:
       +materialized: view
-
-    # Intermediate: transformaciones intermedias
-    intermediate:
-      +materialized: view
-
-    # Marts: modelos finales para analisis
+      +schema: main_staging
     marts:
-      dimensional:
-        +materialized: table
-        +schema: dimensional
-      obt:
-        +materialized: table
-        +schema: obt
+      +materialized: table
+      +schema: main_marts

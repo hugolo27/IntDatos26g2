@@ -1,26 +1,32 @@
-# Pokemon Analytics - dbt Project
+# Ecommerce Analytics - dbt Project
 
-Data engineering project using Airbyte, dbt, and MotherDuck to analyze Pokemon data from PokeAPI.
+Data engineering project using Airbyte, dbt, MotherDuck, Prefect and Metabase to analyze ecommerce data.
 
-## Project Overview
+## Pipeline Architecture
 
-This project demonstrates an ELT pipeline with the following stack:
-- Airbyte for data extraction
-- dbt for data transformation
-- MotherDuck (DuckDB cloud) as the data warehouse
+```
+MySQL (ecommerce) → Airbyte → MotherDuck → dbt → Prefect → Metabase
+```
+
+## Stack
+
+- **Airbyte** - Data extraction from MySQL to MotherDuck
+- **dbt** - Data transformation and modeling
+- **MotherDuck** (DuckDB cloud) - Data warehouse
+- **Prefect** - Pipeline orchestration
+- **Metabase** - Data visualization
 
 ## Data Models
 
-Two modeling approaches are implemented:
+### Staging (`main_staging`)
+- `stg_orders` - Orders cleaned and typed
+- `stg_customers` - Customers cleaned and typed
+- `stg_products` - Products cleaned and typed
 
-**Star Schema (Dimensional Model)**
-- fact_pokemon_stats - metrics and measurements
-- dim_pokemon - descriptive attributes
-- dim_power_tier - power classification
-- dim_type - type catalog
-
-**OBT (One Big Table)**
-- obt_pokemon_complete - denormalized table for simple queries
+### Marts (`main_marts`)
+- `fct_orders` - Enriched orders fact table (OBT)
+- `fct_sales_by_country` - Sales aggregated by country
+- `fct_sales_by_product` - Sales aggregated by product
 
 ## Project Structure
 
@@ -28,20 +34,25 @@ Two modeling approaches are implemented:
 models/
 ├── staging/
 │   ├── _sources.yml
-│   ├── stg_pokemon.sql
-│   └── stg_commits.sql
-├── intermediate/
-│   └── int_pokemon_with_types.sql
+│   ├── schema.yml
+│   ├── stg_orders.sql
+│   ├── stg_customers.sql
+│   └── stg_products.sql
 └── marts/
-    ├── dimensional/
-    └── obt/
+    ├── schema.yml
+    ├── fct_orders.sql
+    ├── fct_sales_by_country.sql
+    └── fct_sales_by_product.sql
+tests/
+├── assert_no_negative_amounts.sql
+└── assert_valid_order_status.sql
 ```
 
 ## Setup
 
-Install dependencies:
 ```bash
 pip install dbt-duckdb
+dbt deps
 ```
 
 Configure MotherDuck in `~/.dbt/profiles.yml`
@@ -49,40 +60,32 @@ Configure MotherDuck in `~/.dbt/profiles.yml`
 ## Running the Project
 
 ```bash
-dbt run          # build models
-dbt test         # run tests
-dbt docs generate # generate documentation
-dbt docs serve   # view docs locally
+dbt deps            # install packages
+dbt run             # build models
+dbt test            # run tests
+dbt build           # run + test
+dbt docs generate   # generate documentation
+dbt docs serve      # view docs at http://localhost:8001
+```
+
+## Orchestration
+
+```bash
+python pipeline.py  # run full ELT pipeline with Prefect
 ```
 
 ## Data Sources
 
-Data extracted using Airbyte to MotherDuck database `airbyte_curso`:
-
-1. **PokeAPI** - Pokemon data (height, weight, types, stats)
-2. **GitHub** - Repository commits from IntDatos26g2
-
-## Data Lineage
-
-![DAG Lineage](screenshots/dag_lineage.png)
-
-The lineage graph shows data flow from sources through staging, intermediate, and mart layers.
+1. **MySQL (ecommerce)** - Orders, customers, products via Airbyte
+2. **GitHub** - Repository commits
 
 ## Testing
 
-The project includes comprehensive data quality tests:
-- **44 data tests** in total
-- Generic tests (unique, not_null, relationships)
-- dbt-expectations tests (value ranges, type validation, string length)
-- 2 custom singular tests for business logic validation
+- **42 tests total** — all passing
+- Generic tests: `unique`, `not_null`, `accepted_values`
+- dbt-expectations: value range validation, string length validation
+- 2 custom singular tests for business logic
 
-All tests pass successfully with `dbt build`.
+## Data Lineage
 
-### Test Results
-![DAG with Tests](screenshots/dag_with_tests.png)
-
-## Status
-
-- Star Schema and OBT models implemented
-- Staging and intermediate layers complete
-- Tests in progress
+![DAG](screenshots/DAG.png)

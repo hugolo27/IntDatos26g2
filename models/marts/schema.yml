@@ -1,0 +1,72 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Fact table de órdenes enriquecida con datos de clientes y productos. Modelo OBT (One Big Table) para análisis de negocio."
+    columns:
+      - name: order_id
+        description: "ID único de la orden"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Nombre del cliente"
+        tests:
+          - not_null
+      - name: product_name
+        description: "Nombre del producto"
+        tests:
+          - not_null
+      - name: amount
+        description: "Monto de la orden en USD"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 100000
+      - name: status
+        description: "Estado de la orden: completed, pending, cancelled"
+        tests:
+          - not_null
+      - name: country
+        description: "País del cliente"
+        tests:
+          - not_null
+      - name: category
+        description: "Categoría del producto"
+        tests:
+          - not_null
+      - name: margin
+        description: "Margen calculado como amount - price"
+
+  - name: fct_sales_by_country
+    description: "Ventas completadas agregadas por país. Útil para análisis geográfico."
+    columns:
+      - name: country
+        description: "País del cliente"
+        tests:
+          - unique
+          - not_null
+      - name: total_orders
+        description: "Total de órdenes completadas"
+      - name: total_revenue
+        description: "Revenue total en USD"
+      - name: avg_order_value
+        description: "Valor promedio de orden en USD"
+
+  - name: fct_sales_by_product
+    description: "Ventas completadas agregadas por producto. Útil para análisis de portafolio."
+    columns:
+      - name: product_name
+        description: "Nombre del producto"
+        tests:
+          - not_null
+      - name: category
+        description: "Categoría del producto"
+      - name: total_orders
+        description: "Total de órdenes completadas"
+      - name: total_revenue
+        description: "Revenue total en USD"
+      - name: total_margin
+        description: "Margen total en USD"
